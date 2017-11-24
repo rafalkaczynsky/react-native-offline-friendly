@@ -1,17 +1,4 @@
-# React Native Firebase Starter<a href="https://rnfirebase.io"><img align="left" src="http://i.imgur.com/01XQL0x.png"></a>
-
-[![Backers on Open Collective](https://opencollective.com/react-native-firebase/backers/badge.svg)](#backers)
-[![Sponsors on Open Collective](https://opencollective.com/react-native-firebase/sponsors/badge.svg)](#sponsors)
-[![npm version](https://img.shields.io/npm/v/react-native-firebase.svg?style=flat-square)](https://www.npmjs.com/package/react-native-firebase)
-[![NPM downloads](https://img.shields.io/npm/dm/react-native-firebase.svg?style=flat-square)](https://www.npmjs.com/package/react-native-firebase)
-[![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg?style=flat-square)](https://discord.gg/t6bdqMs)
-[![Twitter Follow](https://img.shields.io/twitter/follow/rnfirebase.svg?style=social&label=Follow)](https://twitter.com/rnfirebase)
-
----
-
-A basic react native app with [`react-native-firebase`](https://github.com/invertase/react-native-firebase) pre-integrated  to get you started quickly.
-
----
+# React Native Offline Friendly <a href="https://rnfirebase.io"><img align="left" src="http://i.imgur.com/01XQL0x.png"></a>
 
 
 ### Getting Started
@@ -20,7 +7,7 @@ If you're only developing for one platform you can ignore the steps below that a
 
 #### 1) Clone & Install Dependencies
 
-- 1.1) `git clone https://github.com/invertase/react-native-firebase-starter.git`
+- 1.1) `git clone https://github.com/rafalkaczynsky/react-native-offline-friendly.git`
 - 1.2) `cd react-native-firebase-starter` - cd into your newly created project directory.
 - 1.3) Install NPM packages with your package manager of choice - i.e run `yarn` or `npm install`
 - 1.4) **[iOS]** `cd ios` and run `pod install` - if you don't have CocoaPods you can follow [these instructions](https://guides.cocoapods.org/using/getting-started.html#getting-started) to install it.
