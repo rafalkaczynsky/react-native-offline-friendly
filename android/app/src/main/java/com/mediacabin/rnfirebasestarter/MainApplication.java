@@ -1,4 +1,4 @@
-package com.invertase.rnfirebasestarter;
+package com.mediacabin.offlineapp;
 
 import android.app.Application;
 

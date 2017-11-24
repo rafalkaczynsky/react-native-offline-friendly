@@ -1,18 +1,71 @@
 import React from 'react';
-import { StyleSheet, Platform, Image, Text, View } from 'react-native';
-
+import { StyleSheet, Platform, Image, Text, View, TextInput, Button} from 'react-native';
+import RNRestart from 'react-native-restart'; 
 import firebase from 'react-native-firebase';
 
 export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      // firebase things?
+      refresh: false
     };
+   /* var connectedRef = firebase.database().ref(".info/connected");
+    connectedRef.on("value", function(snap) {
+      if (snap.val() === true) {
+        alert("connected");
+     //   firebase.database().goOnline();
+    
+      } else {
+        alert("not connected");
+    //    firebase.database().goOffline();
+      }
+    });*/
   }
 
-  componentDidMount() {
-    // firebase things?
+  componentWillMount() {
+ 
+    const DeafualtApp = firebase.app()
+
+    this.FirebaseReference = DeafualtApp.database().ref('AdminDetails')
+    this.FirebaseReference.keepSynced(true)
+
+    this.FirebaseReference.once('value', (snapshot) => {
+      const AdminDetails = snapshot.val()
+      const name = AdminDetails.name
+      const surname = AdminDetails.surname
+      console.log('AdminDetails');
+      console.log(AdminDetails)
+      console.log(name);
+      console.log(surname);
+      this.setState({name: name, surname: surname})
+    })
+
+    this.FirebaseReference.on('child_changed',  (snapshot) => {
+      const AdminDetails = snapshot
+
+      this.setState({
+        [snapshot.key]: snapshot._value
+      })
+    });
+    
+  }
+
+  
+
+  updateRealtimeDatabase(value, recordName){
+    if (recordName === 'name'){
+      this.FirebaseReference.update({
+        name: value
+      })
+    }
+    if (recordName === 'surname'){
+      this.FirebaseReference.update({
+        surname: value
+      })
+    }
+  }
+  componentWillReceiveProps(){
+
   }
 
   render() {
@@ -20,35 +73,39 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <Image source={require('./assets/RNFirebase512x512.png')} style={[styles.logo]} />
         <Text style={styles.welcome}>
-          Welcome to the React Native{'\n'}Firebase starter project!
+          Welcome to the Firebase React Native {'\n'}App with offline persistance enabled!
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        {Platform.OS === 'ios' ? (
-          <Text style={styles.instructions}>
-            Press Cmd+R to reload,{'\n'}
-            Cmd+D or shake for dev menu
-          </Text>
-        ) : (
-          <Text style={styles.instructions}>
-            Double tap R on your keyboard to reload,{'\n'}
-            Cmd+M or shake for dev menu
-          </Text>
-        )}
         <View style={styles.modules}>
-          <Text style={styles.modulesHeader}>The following Firebase modules are enabled:</Text>
-          {firebase.admob.nativeModuleExists && <Text style={styles.module}>Admob</Text>}
-          {firebase.analytics.nativeModuleExists && <Text style={styles.module}>Analytics</Text>}
-          {firebase.auth.nativeModuleExists && <Text style={styles.module}>Authentication</Text>}
-          {firebase.crash.nativeModuleExists && <Text style={styles.module}>Crash Reporting</Text>}
-          {firebase.firestore.nativeModuleExists && <Text style={styles.module}>Cloud Firestore</Text>}
-          {firebase.messaging.nativeModuleExists && <Text style={styles.module}>Messaging</Text>}
-          {firebase.perf.nativeModuleExists && <Text style={styles.module}>Performance Monitoring</Text>}
-          {firebase.database.nativeModuleExists && <Text style={styles.module}>Realtime Database</Text>}
-          {firebase.config.nativeModuleExists && <Text style={styles.module}>Remote Config</Text>}
-          {firebase.storage.nativeModuleExists && <Text style={styles.module}>Storage</Text>}
+          <Text style={{ marginBottom: 10 }}>Name: <Text style={{fontWeight: 'bold', marginBottom: 30 }}>{this.state.name}</Text></Text>
+          <Text style={{ marginBottom: 10 }}>Surname: <Text style={{fontWeight: 'bold', marginBottom: 30 }}>{this.state.surname}</Text></Text>
+
+          <TextInput
+            style={styles.textInput}
+            underlineColorAndroid='transparent'
+            placeholder='Enter your name'
+            onChangeText={(txt)=>{
+            // onChangeText event save text to the state object
+            this.updateRealtimeDatabase(txt, 'name')
+            }}
+          />
+          <TextInput
+            style={styles.textInput}
+            underlineColorAndroid='transparent'
+            placeholder='Enter your surname'
+            onChangeText={(txt)=>{
+              // onChangeText event save text to the state object
+              this.updateRealtimeDatabase(txt, 'surname')
+            }}
+          />
+
+          <Button
+            onPress={()=> RNRestart.Restart()}
+            title="Reload App"
+            color="#841584"
+          />
+
         </View>
+      
       </View>
     );
   }
@@ -76,8 +133,19 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  textInput: {
+    height: 40, 
+    borderColor: 'grey', 
+    backgroundColor: 'white', 
+    borderWidth: 1, 
+    marginBottom: 10, 
+    fontSize: 12, 
+    paddingLeft: 10
+  },
   modules: {
     margin: 20,
+    width: '80%'
+
   },
   modulesHeader: {
     fontSize: 16,
