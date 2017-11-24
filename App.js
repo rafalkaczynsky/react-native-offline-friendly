@@ -1,7 +1,27 @@
 import React from 'react';
-import { StyleSheet, Platform, Image, Text, View, TextInput, Button} from 'react-native';
+import { StyleSheet, Platform, Image, Text, View, TextInput, Button, NetInfo} from 'react-native';
 import RNRestart from 'react-native-restart'; 
 import firebase from 'react-native-firebase';
+
+var connection  = null
+
+NetInfo.isConnected.fetch().then(isConnected => {
+  console.log('First, is ' + (isConnected ? 'online' : 'offline'));
+});
+
+function handleFirstConnectivityChange(isConnected) {
+  connection = isConnected ? 'online' : 'offline'
+
+  NetInfo.isConnected.removeEventListener(
+    'change',
+    handleFirstConnectivityChange
+  );
+}
+
+NetInfo.isConnected.addEventListener(
+  'change',
+  handleFirstConnectivityChange
+);
 
 export default class App extends React.Component {
   constructor() {
@@ -9,21 +29,13 @@ export default class App extends React.Component {
     this.state = {
       refresh: false
     };
-   /* var connectedRef = firebase.database().ref(".info/connected");
-    connectedRef.on("value", function(snap) {
-      if (snap.val() === true) {
-        alert("connected");
-     //   firebase.database().goOnline();
-    
-      } else {
-        alert("not connected");
-    //    firebase.database().goOffline();
-      }
-    });*/
   }
 
+
   componentWillMount() {
- 
+
+
+
     const DeafualtApp = firebase.app()
 
     this.FirebaseReference = DeafualtApp.database().ref('AdminDetails')
@@ -71,6 +83,8 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+      <Text style={{marginBottom: 30}}>CREATED BY RAFAL KACZYNSKY</Text>
+      <Text>Your APP is {connection}</Text>
         <Image source={require('./assets/RNFirebase512x512.png')} style={[styles.logo]} />
         <Text style={styles.welcome}>
           Welcome to the Firebase React Native {'\n'}App with offline persistance enabled!
