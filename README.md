@@ -1,4 +1,4 @@
-# React Native Offline Friendly <a href="https://rnfirebase.io"><img align="left" src="http://i.imgur.com/01XQL0x.png"></a>
+# React Native Offline Friendly 
 
 THIS PROJECT IS CREATED FROM react-native-firebase-starter!
 
